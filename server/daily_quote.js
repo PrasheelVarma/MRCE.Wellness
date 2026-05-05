@@ -19,7 +19,7 @@ async function generateDailyQuote() {
         const avoidList = pastQuotes?.map(q => q.quote_text).join(" | ") || "None";
 
         // 3. Ask Gemini
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
         const prompt = `You are a wellness mentor for MRCE college. Mode: ${mode}. 
         Task: Provide a simple wellness quote (max 2 lines), a 1-sentence meaning, and a 1-sentence 'Task of the Day'.
         Rules: Avoid these concepts: ${avoidList}. Use 8th-grade English.
