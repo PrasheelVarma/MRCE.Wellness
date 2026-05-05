@@ -1,0 +1,24 @@
+# --- Flutter/Dart ---
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+**/*.jks
+**/*.keystore
+**/google-services.json
+
+# --- Node.js (Server) ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+
+# --- IDEs/OS ---
+.idea/
+.vscode/
+*.iml
+.DS_Store

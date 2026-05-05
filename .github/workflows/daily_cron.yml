@@ -1,0 +1,32 @@
+name: Daily Wellness Quote
+on:
+  schedule:
+    - cron: '30 18 * * *' # Runs at 12:00 AM IST (18:30 UTC)
+  workflow_dispatch: # This adds a "Run" button on GitHub so you can test it manually
+
+jobs:
+  generate-quote:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server # Tells GitHub to run commands inside your server folder
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: './server/package-lock.json'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run AI Generation Script
+        run: node daily_quote.js
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
