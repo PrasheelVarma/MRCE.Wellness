@@ -3,15 +3,18 @@ import '../services/quote_service.dart';
 import '../theme/app_theme.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.quoteService});
+
+  final QuoteService? quoteService;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final QuoteService _quoteService = QuoteService();
+  late final QuoteService _quoteService = widget.quoteService ?? QuoteService();
   bool _isLoading = true;
+  bool _hasError = false;
   Map<String, dynamic>? _quote;
 
   @override
@@ -21,10 +24,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadContent() async {
+    setState(() {
+      _isLoading = true;
+      _hasError = false;
+    });
     final data = await _quoteService.getTodayQuote();
     setState(() {
       _quote = data;
       _isLoading = false;
+      _hasError = data == null;
     });
   }
 
@@ -39,8 +47,30 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : _quote == null
-          ? const Center(child: Text("Waiting for tomorrow's inspiration..."))
+          : _hasError
+          ? Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.wifi_off_outlined, size: 48, color: Colors.grey),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "Couldn't load today's quote.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton.icon(
+                      onPressed: _loadContent,
+                      icon: const Icon(Icons.refresh),
+                      label: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              ),
+            )
           : SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(
