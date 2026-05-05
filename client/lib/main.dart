@@ -10,8 +10,12 @@ const _supabaseAnonKey = String.fromEnvironment('SUPABASE_ANON_KEY');
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  assert(_supabaseUrl.isNotEmpty, 'SUPABASE_URL must be set via --dart-define');
-  assert(_supabaseAnonKey.isNotEmpty, 'SUPABASE_ANON_KEY must be set via --dart-define');
+  if (_supabaseUrl.isEmpty || _supabaseAnonKey.isEmpty) {
+    throw StateError(
+      'SUPABASE_URL and SUPABASE_ANON_KEY must be provided via --dart-define at build time. '
+      'See client/.env.example for details.',
+    );
+  }
 
   await Supabase.initialize(
     url: _supabaseUrl,
