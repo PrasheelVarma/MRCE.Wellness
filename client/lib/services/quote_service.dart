@@ -4,7 +4,8 @@ class QuoteService {
   SupabaseClient get _supabase => Supabase.instance.client;
 
   Future<Map<String, dynamic>?> getTodayQuote() async {
-    final today = DateTime.now().toIso8601String().split('T')[0];
+    // Use UTC date to match the server, which stores post_date in UTC.
+    final today = DateTime.now().toUtc().toIso8601String().split('T')[0];
 
     try {
       final data = await _supabase

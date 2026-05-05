@@ -36,6 +36,11 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  String _safeString(String key, String fallback) {
+    final value = (_quote![key] as String?)?.trim();
+    return (value != null && value.isNotEmpty) ? value : fallback;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,13 +93,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     Text(
-                      _quote!['quote_text'],
+                      _safeString('quote_text', 'No quote available.'),
                       style: Theme.of(context).textTheme.displayLarge,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      "— ${_quote!['author']}",
+                      "— ${_safeString('author', 'Unknown')}",
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontStyle: FontStyle.italic),
                     ),
                   ],
