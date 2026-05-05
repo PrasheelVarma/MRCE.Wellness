@@ -18,14 +18,14 @@ class QuoteService {
       }
 
       // No quote scheduled for today — fall back to the most recent one.
-      return await _getMostRecentQuote();
+      return await _getLatestScheduledQuote();
 
     } catch (e) {
-      return await _getMostRecentQuote();
+      return await _getLatestScheduledQuote();
     }
   }
 
-  Future<Map<String, dynamic>?> _getMostRecentQuote() async {
+  Future<Map<String, dynamic>?> _getLatestScheduledQuote() async {
     return await _supabase
         .from('quotes')
         .select()
